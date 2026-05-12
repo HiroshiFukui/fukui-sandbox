@@ -1,0 +1,7 @@
+display-name,menu-code,description,action,args,phase,after,before,required,output-location,outputs
+AI Sandbox Architect,AA,Interactive orchestrator for sandbox management,rebirth,[--headless],anytime,,,,false,,agent session
+Create AI Sandbox,CR,Scaffolds physical files for a new sandbox,create,[blueprint_name],2-planning,,,false,sa_sandbox_root,Dockerfile; docker-compose.yaml; init.sh
+Validate AI Sandbox,VA,Performs health checks and security audits,validate,[sandbox_name],3-validation,sa-create-ai-sandbox:create,,false,,validation report (HTML)
+Document AI Sandbox,DO,Generates comprehensive technical documentation,document,[sandbox_name],anytime,sa-validate-ai-sandbox:validate,,false,,documentation (Markdown)
+Recreate AI Sandbox,RE,Tears down and rebuilds an existing sandbox,recreate,[sandbox_name],anytime,,,,false,,recreated sandbox
+Package Framework Release,PK,Packages the framework for GitHub release,package,[version],anytime,,,,false,,Release package

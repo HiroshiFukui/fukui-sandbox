@@ -1,0 +1,9 @@
+[workflow]
+release_root = "{project-root}/releases"
+exclude_patterns = [".env", "*.key", "secrets/*", ".git/"]
+version_file = "{project-root}/VERSION"
+release_notes_dir = "{project-root}/_bmad/memory/sa/release-notes"
+memory_sa_root = "{project-root}/_bmad/memory/sa"
+
+[workflow.activation_hooks]
+on_activation = "Verify that the memory structure exists and determine the next version number."

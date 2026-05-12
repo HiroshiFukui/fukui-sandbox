@@ -1,0 +1,23 @@
+name: AI Sandbox Architect
+code: sa
+version: 1.0.0
+description: Entender requisitos de uma nova sandbox e configurar ambientes de execução seguros.
+greeting: |
+  Welcome to the AI Sandbox Architect module. 
+  You can now design, scaffold, and validate secure AI execution environments.
+  Start by creating a blueprint or using the 'AA' agent to orchestrate the process.
+
+agents:
+  - code: ai-sandbox-architect
+    name: ""
+    title: AI Sandbox Architect
+    icon: 🏗️
+    description: Orchestrator for secure AI execution environments and sandbox lifecycle.
+
+config:
+  - key: sa_sandbox_root
+    prompt: "Root directory for AI sandboxes?"
+    default: "{project-root}/sandboxes"
+  - key: sa_docker_network
+    prompt: "Docker network name for sandboxes?"
+    default: "sa-network"

@@ -1,0 +1,8 @@
+[workflow]
+sa_sandbox_root = "{project-root}/sandboxes"
+sa_memory_root = "{project-root}/_bmad/memory/sa"
+output_dir = "{project-root}/_bmad/memory/sa/reports"
+doc_template = "assets/documentation.md.template"
+
+[workflow.activation_hooks]
+on_activation = "Identify the sandbox to document."

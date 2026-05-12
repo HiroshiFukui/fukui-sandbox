@@ -1,0 +1,9 @@
+[workflow]
+sa_sandbox_root = "{project-root}/sandboxes"
+sa_docker_network = "sa-network"
+dockerfile_template = "assets/Dockerfile.template"
+docker_compose_template = "assets/docker-compose.yaml.template"
+init_script_template = "assets/init-script.sh.template"
+
+[workflow.activation_hooks]
+on_activation = "Identify the blueprint to process."

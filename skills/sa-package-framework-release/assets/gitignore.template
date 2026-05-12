@@ -1,0 +1,10 @@
+# BMad AI Sandbox Framework - Release Ignore
+.env
+*.key
+secrets/
+.DS_Store
+node_modules/
+__pycache__/
+*.log
+tmp/
+.git/

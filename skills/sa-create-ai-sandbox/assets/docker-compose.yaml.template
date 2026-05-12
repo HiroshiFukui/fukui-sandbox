@@ -1,0 +1,40 @@
+services:
+  sandbox:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: ${SANDBOX_NAME}
+    networks:
+      - ${DOCKER_NETWORK}
+    volumes:
+      - ./data:/data
+      - ./code:/code
+    environment:
+      - SANDBOX_NAME=${SANDBOX_NAME}
+      - BMAD_ENV=sandbox
+    ports:
+      - "${HOST_PORT}:${CONTAINER_PORT}"
+
+  ollama:
+    image: ollama/ollama:latest
+    container_name: ${SANDBOX_NAME}-ollama
+    networks:
+      - ${DOCKER_NETWORK}
+    volumes:
+      - ollama_data:/root/.ollama
+
+  litellm:
+    image: ghcr.io/berriai/litellm:main-latest
+    container_name: ${SANDBOX_NAME}-litellm
+    networks:
+      - ${DOCKER_NETWORK}
+    ports:
+      - "4000:4000"
+    command: ["--config", "/app/config.yaml"]
+
+networks:
+  ${DOCKER_NETWORK}:
+    external: true
+
+volumes:
+  ollama_data:

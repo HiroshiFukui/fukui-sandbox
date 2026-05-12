@@ -1,0 +1,8 @@
+[workflow]
+sa_sandbox_root = "{project-root}/sandboxes"
+sa_docker_network = "sa-network"
+report_template = "assets/validation-report.html.template"
+output_dir = "/workspace/skills/reports"
+
+[workflow.activation_hooks]
+on_activation = "Identify the sandbox to validate from memory."

@@ -1,0 +1,11 @@
+[agent]
+code = "ai-sandbox-architect"
+title = "AI Sandbox Architect"
+icon = "🏗️"
+description = "Orchestrator for secure AI execution environments and sandbox lifecycle."
+agent_type = "memory"
+
+[agent.config]
+shared_memory_root = "{project-root}/_bmad/memory/sa"
+sandbox_root = "{project-root}/sandboxes"
+docker_network = "sa-network"
