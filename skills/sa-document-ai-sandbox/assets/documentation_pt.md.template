@@ -1,0 +1,89 @@
+# Documentação Técnica: AI Sandbox - {{sandbox_name}}
+
+## 1. Visão Geral
+Este documento fornece as especificações técnicas, decisões arquiteturais e diretrizes de uso para a AI Sandbox `{{sandbox_name}}`.
+
+- **Gerado em:** {{timestamp}}
+- **Módulo:** AI Sandbox Architect (SA)
+- **Status:** {{status}}
+
+---
+
+## 2. Notas de Arquitetura
+Estas notas são derivadas das decisões arquiteturais tomadas durante a fase de design.
+
+{{architecture_notes}}
+
+---
+
+## 3. Especificações Técnicas
+
+### 3.1 Portas Expostas
+| Serviço | Porta Hospedeiro | Porta Container | Descrição |
+| ------- | ---------------- | --------------- | --------- |
+{{port_table}}
+
+### 3.2 Volumes e Persistência
+| Caminho Hospedeiro | Caminho Container | Propósito |
+| ------------------ | ----------------- | --------- |
+{{volume_table}}
+
+### 3.3 Variáveis de Ambiente
+| Variável | Valor / Origem | Descrição |
+| -------- | -------------- | --------- |
+{{env_var_table}}
+
+### 3.4 Configuração de Rede
+- **Nome da Rede:** `{{docker_network}}`
+- **Driver:** bridge
+
+---
+
+## 4. Guia de Uso
+
+### 4.1 Início Rápido
+{% if runtime == 'devcontainer' or runtime == 'both' %}
+#### VS Code Dev Container
+1. Abra esta pasta no VS Code.
+2. Quando solicitado, clique em **"Reopen in Container"** (ou use a Paleta de Comandos: `Dev Containers: Reopen in Container`).
+3. O VS Code construirá a imagem e conectará ao container.
+{% endif %}
+
+{% if runtime == 'docker-compose' or runtime == 'both' %}
+#### Docker Compose
+Para iniciar o ambiente da sandbox:
+```bash
+cd {{sandbox_path}}
+docker-compose up -d
+```
+
+Para parar o ambiente:
+```bash
+docker-compose down
+```
+{% endif %}
+
+### 4.2 Interagindo com as Ferramentas
+{{tool_usage_guides}}
+
+### 4.3 Logs e Resolução de Problemas
+{% if runtime == 'devcontainer' %}
+Os logs podem ser visualizados diretamente no terminal do VS Code ou através da visualização da extensão "Dev Containers".
+{% else %}
+Os logs de todos os serviços são armazenados no diretório `./logs` dentro da raiz da sandbox. Para visualizar os logs em tempo real:
+```bash
+docker-compose logs -f
+```
+{% endif %}
+
+---
+
+## 5. Referência do Blueprint
+A sandbox é baseada na seguinte configuração de blueprint:
+
+```yaml
+{{blueprint_content}}
+```
+
+---
+*Gerado por BMad Workflow: sa-document-ai-sandbox*

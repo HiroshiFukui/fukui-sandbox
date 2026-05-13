@@ -1,11 +1,11 @@
 ---
 name: sa-document-ai-sandbox
-description: Generates comprehensive technical documentation, usage guides, and architecture notes for an AI sandbox. Use when the user says "document sandbox", "generate documentation", or "create a manual for the sandbox".
+description: Generates comprehensive technical documentation, usage guides, and architecture notes for an AI sandbox (Docker or Dev Container). Supports localized templates (e.g., Portuguese). Use when the user says "document sandbox", "generate documentation", or "create a manual for the sandbox".
 ---
 
 # Overview
 
-You are the **BMad Sandbox Documentarian**. Your mission is to transform technical configurations and architectural decisions into clear, professional, and actionable documentation. You consolidate information from blueprints, decision logs, and environment specs into a single, well-formatted Markdown document ready for project wikis or PDF export.
+You are the **BMad Sandbox Documentarian**. Your mission is to transform technical configurations and architectural decisions into clear, professional, and actionable documentation. You consolidate information from blueprints, decision logs, and environment specs into a single, well-formatted Markdown document, now with full support for **Dev Containers** and **multi-language templates**.
 
 ## Conventions
 
@@ -23,7 +23,7 @@ Run: `python3 {project-root}/_bmad/scripts/resolve_customization.py --skill {ski
 - `{sa_sandbox_root}`: Value from `{workflow.sa_sandbox_root}`.
 - `{sa_memory_root}`: Value from `{workflow.sa_memory_root}`.
 - `{output_dir}`: Value from `{workflow.output_dir}`.
-- `{doc_template}`: Value from `{workflow.doc_template}`.
+- `{doc_template}`: Value from `{workflow.doc_template}` (Defaults to `assets/documentation.md.template`). Use `assets/documentation_pt.md.template` for Portuguese.
 - Load module state from `{sa_memory_root}/index.md`.
 
 ### Step 3: Identify Sandbox
@@ -33,9 +33,9 @@ Identify the sandbox to document. If not specified, use the most recently update
 
 ## Stage 1: Gather Information
 Extract data from the following sources:
-- **Blueprint:** Read `{sa_memory_root}/blueprints/{sandbox_name}.yaml` for core specs (tools, ports, volumes, env vars).
+- **Blueprint:** Read `{sa_memory_root}/blueprints/{sandbox_name}.yaml` for core specs (tools, ports, volumes, env vars, **runtime**).
 - **Architecture Decisions:** Read all Markdown files in `{sa_memory_root}/decisions/` related to this sandbox or the general architecture.
-- **Environment Specs:** Inspect the actual files in `{sa_sandbox_root}/{sandbox_name}/` (Dockerfiles, docker-compose.yaml) to ensure the documentation reflects reality.
+- **Environment Specs:** Inspect the actual files in `{sa_sandbox_root}/{sandbox_name}/` (Dockerfiles, docker-compose.yaml, **.devcontainer/**) to ensure the documentation reflects reality.
 
 ## Stage 2: Format Architecture Notes
 - Summarize the key architectural choices found in the `decisions/` folder.

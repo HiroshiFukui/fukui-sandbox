@@ -27,72 +27,37 @@ updated: '2026-05-12'
 
 ## Vision
 
-The AI Sandbox Architect module aims to abstract the infrastructure complexity of setting up secure, Docker-based AI execution environments on Ubuntu/WSL. It provides a universal, professional-grade framework to prevent vendor lock-in and ensure architectural best practices across the full lifecycle of a sandbox.
+The AI Sandbox Architect module aims to abstract the infrastructure complexity of setting up secure, Docker-based AI execution environments on Ubuntu/WSL and Dev Containers. It provides a universal, professional-grade framework to prevent vendor lock-in and ensure architectural best practices across the full lifecycle of a sandbox.
 
 ## Architecture
 
-The module follows the **Orchestrator Agent with Modular Workflows** pattern. A single master agent, `ai-sandbox-architect`, serves as the primary conversational interface and strategic guide. It coordinates five specialized, independently invokable workflows that handle the technical heavy lifting.
+The module follows the **Orchestrator Agent with Modular Workflows** pattern. A single master agent, `ai-sandbox-architect`, serves as the primary conversational interface and strategic guide. It coordinates specialized, independently invokable workflows that handle the technical heavy lifting.
 
-**Rationale:**
-- **Cohesion:** One conversational partner provides a unified experience and maintains the design "vision."
-- **Modularity:** Workflows are self-contained and can be run directly for repetitive tasks without conversation.
-- **Guidance:** The Architect analyzes state and recommends the appropriate workflow (e.g., "I see the blueprint exists but is not validated. Shall we run the validation workflow?").
+**Supported Runtimes:**
+1. **docker-compose:** Standard Docker Compose environment for general purpose use.
+2. **devcontainer:** VS Code / Dev Container compatible environment for agentic IDEs.
+3. **both:** Hybrid environment supporting both standard Compose and Dev Container workflows.
+
+### Dev Container Security Requirements
+- **Isolation:** Mount only the project workspace by default. No user home, `~/.ssh`, or `/var/run/docker.sock` mounts by default.
+- **Privilege:** Use non-root user. Apply `no-new-privileges: true`.
+- **Capabilities:** Drop Linux capabilities when possible.
+- **Secrets:** Keep secrets in `.env` files outside of Git.
+- **Connectivity:** Support `host.docker.internal` for access to model gateways (LiteLLM, Ollama).
 
 ### Memory Architecture
-
-The module utilizes **Single Shared Project Memory**. It avoids personal agent memory to ensure all state, decisions, and history are transparent and accessible to both the Architect and the Workflows.
-
-**Folder Structure:**
-`{project-root}/_bmad/memory/sa/`
-- `index.md`: Current status of all sandboxes and recent activity.
-- `blueprints/`: JSON/YAML definitions of planned sandboxes.
-- `decisions/`: Markdown files documenting architectural choices and environmental constraints.
-- `daily/`: Chronological logs of all module actions.
+... (unchanged) ...
 
 ### Memory Contract
-
-| Filename | Purpose | Readers | Writers |
-| -------- | ------- | ------- | ------- |
-| `index.md` | Orientation and state tracking | Architect, All Workflows | Architect, All Workflows |
-| `blueprints/*.yaml` | Sandbox definitions | Architect, All Workflows | Architect, Create/Recreate |
-| `reports/validation-*.md` | Quality and health checks | Architect | Validate Workflow |
-| `release-notes/*.md` | Versioning and change logs | Architect | Package Workflow |
+... (unchanged) ...
 
 ### Cross-Agent Patterns
-
-- **Orchestrator Role:** The Architect reads the `index.md` and `blueprints/` on activation to orient itself.
-- **Workflow Handoff:** The Architect prepares the necessary context (e.g., pointing to a specific blueprint) and recommends the user invoke the relevant workflow.
-- **State Loopback:** Workflows update the shared memory folder and `index.md` upon completion, which the Architect picks up in the next turn.
+... (unchanged) ...
 
 ## Skills
 
 ### ai-sandbox-architect
-
-**Type:** agent
-
-**Persona:** A senior systems architect and DevOps expert. Professional, precise, and visionary. Thinks in terms of security, portability, and professional standards.
-
-**Core Outcome:** The user has a clear, documented path to a functional and secure AI sandbox that follows the BMAD method.
-
-**The Non-Negotiable:** Must ensure that all architectural decisions are documented and grounded in the user's technical constraints (Ubuntu/WSL/Docker).
-
-**Capabilities:**
-
-| Capability | Outcome | Inputs | Outputs |
-| ---------- | ------- | ------ | ------- |
-| Discovery | Comprehensive list of requirements and constraints. | User dialogue | Sandbox Blueprint (Draft) |
-| Strategic Guidance | Recommendation on next steps based on system state. | Shared Memory (index) | User advice / Workflow trigger |
-| Design Review | Validation of architectural choices against best practices. | Blueprint | Architectural Report (HTML) |
-
-**Memory:** Reads `{project-root}/_bmad/memory/sa/index.md` and `blueprints/` on activation. Writes to `decisions/` and `daily/`.
-
-**Init Responsibility:** Scaffolds the shared memory directory structure if it doesn't exist.
-
-**Activation Modes:** Interactive.
-
-**Tool Dependencies:** None (Conversational/Strategic).
-
-**Design Notes:** Focuses on the "Why" and "What". Leaves the "How" to the workflows.
+... (unchanged) ...
 
 ---
 
@@ -100,29 +65,28 @@ The module utilizes **Single Shared Project Memory**. It avoids personal agent m
 
 **Type:** workflow
 
-**Purpose:** Scaffolds the physical files for a new Docker-based sandbox.
+**Purpose:** Scaffolds the physical files for a new Docker-based or Dev Container-based sandbox.
 
 **Capabilities:**
 
 | Capability | Outcome | Inputs | Outputs |
 | ---------- | ------- | ------ | ------- |
-| File Scaffolding | Dockerfiles, docker-compose.yaml, and init scripts. | Blueprint | Sandbox files in target dir |
+| File Scaffolding | Dockerfiles, docker-compose.yaml, devcontainer.json, and init scripts. | Blueprint | Sandbox files in target dir |
 | Tool Integration | Configured Ollama/LiteLLM/Node/Python environments. | Blueprint | Environment config files |
+
+**Dev Container Generation:**
+When `devcontainer` mode is selected, generates:
+- `.devcontainer/devcontainer.json`
+- `.devcontainer/docker-compose.yml`
+- `.devcontainer/Dockerfile`
+- `.env`
+- `workspace/`, `outputs/`, `logs/`
+- `README.md`
 
 ---
 
 ### validate-ai-sandbox
-
-**Type:** workflow
-
-**Purpose:** Runs health checks and security audits on a running sandbox.
-
-**Capabilities:**
-
-| Capability | Outcome | Inputs | Outputs |
-| ---------- | ------- | ------ | ------- |
-| Environment Check | Validation of Docker, WSL, GPU, and Network. | Runtime State | Validation Report (HTML) |
-| Compliance Audit | Verification of BMAD conventions and security. | Blueprint / Files | Security Scorecard |
+... (unchanged) ...
 
 ---
 

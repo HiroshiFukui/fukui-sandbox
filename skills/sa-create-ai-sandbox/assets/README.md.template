@@ -1,0 +1,23 @@
+# AI Sandbox: ${sandbox_name}
+
+This sandbox was generated using the BMAD AI Sandbox Framework.
+
+## How to use
+
+### Dev Container Mode
+1. Ensure you have the **Dev Containers** extension installed in VS Code.
+2. Open this folder in VS Code.
+3. Click "Reopen in Container" when prompted (or use the Command Palette).
+
+### Directory Structure
+- `workspace/`: Your project code and data.
+- `outputs/`: Results and generated files.
+- `logs/`: Execution logs.
+- `.devcontainer/`: Configuration for the Dev Container.
+
+## Security Note
+This sandbox is configured with an **agent-safe** profile:
+- Non-root user: `sandboxuser`
+- No new privileges
+- Dropped Linux capabilities
+- Restricted mounts (only workspace, outputs, logs)

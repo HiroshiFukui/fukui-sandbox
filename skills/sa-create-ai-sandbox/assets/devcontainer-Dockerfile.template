@@ -1,0 +1,24 @@
+FROM ubuntu:22.04
+
+# Avoid prompts from apt
+ENV DEBIAN_FRONTEND=noninteractive
+
+# Install basic tools
+RUN apt-get update && apt-get install -y \
+    curl \
+    git \
+    sudo \
+    && rm -rf /var/lib/apt/lists/*
+
+# Create a non-root user
+RUN useradd -m sandboxuser && \
+    echo "sandboxuser ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
+
+# Set up workspace
+WORKDIR /workspace
+RUN chown sandboxuser:sandboxuser /workspace
+
+USER sandboxuser
+
+# Entry point
+CMD ["/bin/bash"]

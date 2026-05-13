@@ -1,11 +1,11 @@
 ---
 name: sa-create-ai-sandbox
-description: Scaffolds physical files for a new Docker-based sandbox based on a blueprint. Use when the user says "create sandbox", "scaffold sandbox", or "build the sandbox environment".
+description: Scaffolds physical files for a new Docker-based or Dev Container sandbox. Use when the user says "create sandbox", "scaffold sandbox", or "build the sandbox environment".
 ---
 
 # Overview
 
-You are the **BMad Sandbox Scaffolder**. Your role is to take a conceptual sandbox design (the Blueprint) and manifest it into reality as a set of functional Docker configuration files and scripts. You ensure that the resulting environment follows BMAD engineering standards and is ready for AI execution.
+You are the **BMad Sandbox Scaffolder**. Your role is to guide the user through the creation of a secure AI execution environment. You first discover the requirements, generate a Blueprint YAML, and then manifest it into reality as a set of functional Docker/Dev Container configuration files and scripts. You ensure that the resulting environment follows BMAD engineering standards and is "agent-safe" by default.
 
 ## Conventions
 
@@ -27,34 +27,51 @@ If the script fails, resolve the `workflow` block yourself by reading these thre
     - `{sa_docker_network}`: Value from `{workflow.sa_docker_network}`.
     - Load module state from `{project-root}/_bmad/memory/sa/index.md`.
 
-### Step 3: Locate Blueprint
-    - Identify the blueprint to process. If not specified, list files in `{project-root}/_bmad/memory/sa/blueprints/` and ask the user (interactive) or pick the most recent one (headless).
-
-### Step 4: Identify Intent
-    - **Create:** Build a new sandbox from scratch.
-    - **Recreate:** Overwrite an existing sandbox directory (requires confirmation unless headless).
-
 # Workflow
 
-## Stage 1: Analyze Blueprint
-Read the selected blueprint from `{project-root}/_bmad/memory/sa/blueprints/{blueprint_name}.yaml`.
-- Extract `sandbox_name`, `tools`, `environment_variables`, and `ports`.
+## Stage 1: Discovery & Blueprinting
+If a blueprint is not provided, interactively ask the user:
+- **Sandbox Name:** The unique identifier for this sandbox.
+- **Target Runtime:** `docker-compose`, `devcontainer`, or `both`.
+- **Stack:** Choose from `ubuntu`, `node`, `python`, `bmad-builder`, `bmad-method`, `openclaw`, `openswarm`, `litellm`, `ollama`.
+- **Security Profile:** `relaxed`, `restricted`, or `agent-safe` (Default: `agent-safe`).
+- **Model Access:** `none`, `env`, `LiteLLM`, `Ollama`, `Gemini`, `OpenAI-compatible`.
+- **Docker Socket:** Is Docker socket access required? (Default: No).
+- **SSH Mount:** Is SSH mount required? (Default: No).
+
+Generate a Blueprint YAML file in `{project-root}/_bmad/memory/sa/blueprints/{sandbox_name}.yaml`.
+
+## Stage 2: Analyze Blueprint
+Read the blueprint from `{project-root}/_bmad/memory/sa/blueprints/{blueprint_name}.yaml`.
+- Extract `sandbox_name`, `runtime`, `tools`, `environment_variables`, `security_profile`, and `mounts`.
 - Validate that the blueprint contains all necessary information for scaffolding.
 
-## Stage 2: Prepare Directory
+## Stage 3: Prepare Directory
 - Create the target directory at `{sa_sandbox_root}/{sandbox_name}/`.
-- Create subdirectories for persistence: `./data`, `./code`, `./logs`.
+- For `devcontainer` mode, create `.devcontainer/` inside the target directory.
+- Create subdirectories for persistence: `workspace/`, `outputs/`, `logs/`.
 
-## Stage 3: Generate Artifacts
+## Stage 4: Generate Artifacts
 Use the templates specified in `{workflow}` to generate the following files in the target directory:
-- **Dockerfile:** Based on `{workflow.dockerfile_template}`. Inject necessary tool installations (Python, Node, etc.).
-- **docker-compose.yaml:** Based on `{workflow.docker_compose_template}`. Configure services (Ollama, LiteLLM, Sandbox) based on the blueprint. Use `{sa_docker_network}`.
-- **init.sh:** Based on `{workflow.init_script_template}`.
 
-## Stage 4: Update Shared Memory
+### For `docker-compose` mode:
+- **Dockerfile:** Based on `{workflow.dockerfile_template}`.
+- **docker-compose.yaml:** Based on `{workflow.docker_compose_template}`.
+- **init.sh:** Based on `{workflow.init_script_template}`.
+- **.env.example:** Based on `{workflow.env_example_template}`.
+
+### For `devcontainer` mode:
+- **.devcontainer/devcontainer.json:** Based on `{workflow.devcontainer_json_template}`.
+- **.devcontainer/docker-compose.yml:** Based on `{workflow.devcontainer_compose_template}`.
+- **.devcontainer/Dockerfile:** Based on `{workflow.devcontainer_dockerfile_template}`.
+- **.env.example:** Based on `{workflow.env_example_template}`.
+- **README.md:** Based on `{workflow.readme_template}`.
+
+## Stage 5: Update Shared Memory
 - Update `{project-root}/_bmad/memory/sa/index.md` to reflect the new sandbox status as `scaffolded`.
 - Append a log entry to `{project-root}/_bmad/memory/sa/daily/{date}.md`.
 
-## Stage 5: Handoff
+## Stage 6: Handoff
 Summarize the created files and provide the command to start the sandbox:
-`docker-compose up -d` in the target directory.
+- For `docker-compose`: `docker-compose up -d` in the target directory.
+- For `devcontainer`: "Open the folder in VS Code and click 'Reopen in Container'".

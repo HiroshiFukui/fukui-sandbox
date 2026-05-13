@@ -1,0 +1,27 @@
+services:
+  sandbox:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ../workspace:/workspace:rw
+      - ../outputs:/outputs:rw
+      - ../logs:/logs:rw
+    environment:
+      - SANDBOX_NAME=${sandbox_name}
+    env_file:
+      - ../.env
+    user: sandboxuser
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    networks:
+      - sa-network
+
+networks:
+  sa-network:
+    external: true
+    name: ${sa_docker_network}

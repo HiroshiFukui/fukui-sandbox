@@ -4,6 +4,11 @@ sa_docker_network = "sa-network"
 dockerfile_template = "assets/Dockerfile.template"
 docker_compose_template = "assets/docker-compose.yaml.template"
 init_script_template = "assets/init-script.sh.template"
+devcontainer_json_template = "assets/devcontainer.json.template"
+devcontainer_compose_template = "assets/devcontainer-docker-compose.yml.template"
+devcontainer_dockerfile_template = "assets/devcontainer-Dockerfile.template"
+env_example_template = "assets/env.example.template"
+readme_template = "assets/README.md.template"
 
 [workflow.activation_hooks]
-on_activation = "Identify the blueprint to process."
+on_activation = "Identify the blueprint to process or start discovery."

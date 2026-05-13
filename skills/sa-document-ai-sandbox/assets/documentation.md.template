@@ -42,6 +42,15 @@ These notes are derived from architectural decisions made during the design phas
 ## 4. Usage Guide
 
 ### 4.1 Quick Start
+{% if runtime == 'devcontainer' or runtime == 'both' %}
+#### VS Code Dev Container
+1. Open this folder in VS Code.
+2. When prompted, click **"Reopen in Container"** (or use the Command Palette: `Dev Containers: Reopen in Container`).
+3. VS Code will build the image and connect to the container.
+{% endif %}
+
+{% if runtime == 'docker-compose' or runtime == 'both' %}
+#### Docker Compose
 To start the sandbox environment:
 ```bash
 cd {{sandbox_path}}
@@ -52,15 +61,20 @@ To stop the environment:
 ```bash
 docker-compose down
 ```
+{% endif %}
 
 ### 4.2 Interacting with Tools
 {{tool_usage_guides}}
 
 ### 4.3 Logs & Troubleshooting
+{% if runtime == 'devcontainer' %}
+Logs can be viewed directly in the VS Code terminal or via the "Dev Containers" extension view.
+{% else %}
 Logs for all services are stored in the `./logs` directory within the sandbox root. To view real-time logs:
 ```bash
 docker-compose logs -f
 ```
+{% endif %}
 
 ---
 
