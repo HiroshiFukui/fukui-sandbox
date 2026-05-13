@@ -1,0 +1,13 @@
+name: sandbox-antigravity
+runtime: devcontainer
+stack: node-python
+security_profile: agent-safe
+model_access: litellm
+features:
+  docker_socket: false
+  ssh_mount: false
+  host_gateway: true
+paths:
+  workspace: ./workspace
+  outputs: ./outputs
+  logs: ./logs
